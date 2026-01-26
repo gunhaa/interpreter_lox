@@ -68,10 +68,10 @@ public class Scanner {
                 addToken(match('=') ? BANG_EQUAL : EQUAL);
                 break;
             case '<':
-                addToken(match('=') ? LESS_EQUAL : EQUAL);
+                addToken(match('=') ? LESS_EQUAL : LESS);
                 break;
             case '>':
-                addToken(match('=') ? GREATER_EQUAL :GREATER);
+                addToken(match('=') ? GREATER_EQUAL : GREATER);
                 break;
             case '/':
                 if(match('/')) {
@@ -80,10 +80,10 @@ public class Scanner {
                     addToken(SLASH);
                 }
                 break;
+            // 공백 문자 무시
             case ' ':
             case '\r':
             case '\t':
-                // 공백 문자 무시
                 break;
             case '\n':
                 line++;
@@ -177,7 +177,7 @@ public class Scanner {
         return current >= source.length();
     }
 
-    // advance는 글자를 소비한다
+    // 글자를 소비한다
     private char advance() {
         return source.charAt(current++);
     }
