@@ -3,7 +3,13 @@ plugins {
 }
 
 group = "lox.interpreter"
-version = "1.0-SNAPSHOT"
+version = "1.0.0-SNAPSHOT"
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
+}
 
 repositories {
     mavenCentral()
