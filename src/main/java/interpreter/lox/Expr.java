@@ -2,6 +2,8 @@ package interpreter.lox;
 
 abstract class Expr {
 
+    abstract <R> R accept(Visitor<R> visitor);
+
     interface Visitor<R> {
         R visitBinaryExpr(Binary EXPR);
 
@@ -70,5 +72,4 @@ abstract class Expr {
         final Expr right;
     }
 
-    abstract <R> R accept(Visitor<R> visitor);
 }
