@@ -4,12 +4,22 @@ import java.util.List;
 
 import static interpreter.lox.TokenType.*;
 
+// 파서는 올바름을 판정하지 않으며, AST를 생성하는 책임만을 가진다
 public class Parser {
+    private static class ParseError extends RuntimeException {}
     private final List<Token> tokens;
     private int current = 0;
 
     Parser(List<Token> tokens) {
         this.tokens = tokens;
+    }
+
+    Expr parse() {
+        try {
+            return expression();
+        } catch (ParseError error) {
+            return null;
+        }
     }
 
     private Expr expression() {
@@ -92,6 +102,8 @@ public class Parser {
             consume(RIGHT_PAREN, "Expect ')' after expression.");
             return new Expr.Grouping(expr);
         }
+
+        throw error(peek(), "Expect expression.");
     }
 
     // 특정 상황, 토큰을 소모한다(advance)
@@ -104,6 +116,12 @@ public class Parser {
             }
         }
         return false;
+    }
+
+    private Token consume(TokenType type, String message) {
+        if (check(type)) return advance();
+
+        throw error(peek(), message);
     }
 
     // 토큰을 소모하지 않는다
@@ -128,7 +146,35 @@ public class Parser {
         return tokens.get(current);
     }
 
+    // 토큰을 소비하지 않으며 이전 토큰을 리턴한다
     private Token previous() {
         return tokens.get(current - 1);
+    }
+
+    private ParseError error(Token token, String message) {
+        Lox.error(token, message);
+        return new ParseError();
+    }
+
+    private void synchronize() {
+        advance();
+
+        while(!isAtEnd()) {
+            if(previous().type == SEMICOLON) return;
+
+            switch (peek().type) {
+                case CLASS:
+                case FUN:
+                case VAR:
+                case FOR:
+                case IF:
+                case WHILE:
+                case PRINT:
+                case RETURN:
+                    return;
+            }
+
+            advance();
+        }
     }
 }
