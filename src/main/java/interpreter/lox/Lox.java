@@ -10,7 +10,9 @@ import java.util.List;
 
 public class Lox {
 
+    private static final Interpreter interpreter = new Interpreter();
     static boolean hadError = false;
+    static boolean hadRuntimeError = false;
 
     public static void main(String[] args) throws IOException {
         if(args.length > 1) {
@@ -29,6 +31,7 @@ public class Lox {
         run(new String(bytes, Charset.defaultCharset()));
         // 종료 코드로 에러 식별
         if (hadError) System.exit(65);
+        if (hadRuntimeError) System.exit(70);
     }
 
     private static void runPrompt() throws IOException {
@@ -54,6 +57,7 @@ public class Lox {
         // error 발생시 중단
         if (hadError) return;
 
+        interpreter.interpret(expression);
         System.out.println(new AstPrinter().print(expression));
     }
 
@@ -61,6 +65,11 @@ public class Lox {
     static void error(int line, String message) {
         // 에러를 상세하게 일려주면 알려줄수록 좋지만, 문자열 처리 코드는 복잡하기에 이곳에서는 스킵하고, 줄 수만 표기한다
         report(line, "", message);
+    }
+
+    static void runtimeError(RuntimeError error) {
+        System.err.println(error.getMessage() + "\n[line" + error.token.line + "]");
+        hadRuntimeError = true;
     }
 
     private static void report(int line, String where, String message) {
