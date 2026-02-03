@@ -1,6 +1,6 @@
 package interpreter.lox;
 
-public class Interpreter implements Expr.Visitor<Object>{
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
 
@@ -32,9 +32,24 @@ public class Interpreter implements Expr.Visitor<Object>{
                     return (String) left + (String) right;
                 }
 
-                throw new RuntimeError(expr.operator, "Operand must be two numbers or two strings.");
+                // 멍청한 방법
+//                if (left instanceof Double && right instanceof String) {
+//                    String parsedLeft = left.toString();
+//                    return parsedLeft.substring(0, parsedLeft.length() - 2) + right;
+//                }
+//
+//                if (left instanceof String && right instanceof Double) {
+//                    String parsedRight = right.toString();
+//                    return left + parsedRight.substring(0, parsedRight.length() - 2);
+//                }
+
+                if (left instanceof Double || right instanceof Double) {
+                    return stringify(left) + stringify(right);
+                }
+//                throw new RuntimeError(expr.operator, "Operand must be two numbers or two strings.");
             case SLASH:
                 checkNumberOperand(expr.operator, left, right);
+                checkRightOperand(expr.operator, right);
                 return (double) left / (double) right;
             case STAR:
                 checkNumberOperand(expr.operator, left, right);
@@ -54,6 +69,16 @@ public class Interpreter implements Expr.Visitor<Object>{
 
     private Object evaluate(Expr expr) {
         return expr.accept(this);
+    }
+
+    @Override
+    public Void visitExpressionStmt(Stmt.Expression stmt) {
+        return null;
+    }
+
+    @Override
+    public Void visitPrintStmt(Stmt.Print stmt) {
+        return null;
     }
 
     // 리터럴은 꺼내서 평가만 하면된다
@@ -85,9 +110,14 @@ public class Interpreter implements Expr.Visitor<Object>{
     }
 
     private void checkNumberOperand(Token operator, Object left, Object right) {
-        if(left instanceof Double && right instanceof Double) return;
+        if (left instanceof Double && right instanceof Double) return;
 
         throw new RuntimeError(operator, "Operand must be a number");
+    }
+
+    private void checkRightOperand(Token operator, Object right) {
+        if ((double) right != 0) return;
+        throw new RuntimeError(operator, "0으로 나눌 수 없습니다.");
     }
 
     // false, null은 flasey, 나머지는 모두 truthy
@@ -126,4 +156,5 @@ public class Interpreter implements Expr.Visitor<Object>{
             Lox.runtimeError(error);
         }
     }
+
 }

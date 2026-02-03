@@ -1,17 +1,17 @@
 package interpreter.lox;
 
+import java.util.List;
+
 abstract class Expr {
 
-    abstract <R> R accept(Visitor<R> visitor);
-
     interface Visitor<R> {
-        R visitBinaryExpr(Binary EXPR);
+        R visitBinaryExpr(Binary expr);
 
-        R visitGroupingExpr(Grouping EXPR);
+        R visitGroupingExpr(Grouping expr);
 
-        R visitLiteralExpr(Literal EXPR);
+        R visitLiteralExpr(Literal expr);
 
-        R visitUnaryExpr(Unary EXPR);
+        R visitUnaryExpr(Unary expr);
     }
 
     static class Binary extends Expr {
@@ -72,4 +72,5 @@ abstract class Expr {
         final Expr right;
     }
 
+    abstract <R> R accept(Visitor<R> visitor);
 }
