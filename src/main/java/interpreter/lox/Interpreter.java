@@ -1,6 +1,8 @@
 package interpreter.lox;
 
-public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
+import java.util.List;
+
+public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     @Override
     public Object visitBinaryExpr(Expr.Binary expr) {
 
@@ -54,8 +56,10 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
             case STAR:
                 checkNumberOperand(expr.operator, left, right);
                 return (double) left * (double) right;
-            case BANG_EQUAL: return !isEqual(left, right);
-            case EQUAL: return isEqual(left, right);
+            case BANG_EQUAL:
+                return !isEqual(left, right);
+            case EQUAL:
+                return isEqual(left, right);
         }
 
         // 실행되지 않는다
@@ -71,13 +75,20 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return expr.accept(this);
     }
 
+    private void execute(Stmt stmt) {
+        stmt.accept(this);
+    }
+
     @Override
     public Void visitExpressionStmt(Stmt.Expression stmt) {
+        evaluate(stmt.expression);
         return null;
     }
 
     @Override
     public Void visitPrintStmt(Stmt.Print stmt) {
+        Object value = evaluate(stmt.expression);
+        System.out.println(stringify(value));
         return null;
     }
 
@@ -139,7 +150,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
 
         if (object instanceof Double) {
             String text = object.toString();
-            if(text.endsWith(".0")) {
+            if (text.endsWith(".0")) {
                 text = text.substring(0, text.length() - 2);
             }
             return text;
@@ -148,6 +159,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
         return object.toString();
     }
 
+    /*
     void interpret(Expr expression) {
         try {
             Object value = evaluate(expression);
@@ -156,5 +168,14 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void>{
             Lox.runtimeError(error);
         }
     }
-
+     */
+    void interpret(List<Stmt> statements) {
+        try {
+            for (Stmt statement : statements) {
+                execute(statement);
+            }
+        } catch (RuntimeError error) {
+            Lox.runtimeError(error);
+        }
+    }
 }

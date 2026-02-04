@@ -52,13 +52,14 @@ public class Lox {
         Scanner scanner = new Scanner(source);
         List<Token> tokens = scanner.scanTokens();
         Parser parser = new Parser(tokens);
-        Expr expression = parser.parse();
+        // Expr expression = parser.parse();
+        List<Stmt> statements = parser.parse();
 
         // error 발생시 중단
         if (hadError) return;
 
-        interpreter.interpret(expression);
-        System.out.println(new AstPrinter().print(expression));
+        interpreter.interpret(statements);
+//        System.out.println(new AstPrinter().print(expression));
     }
 
     // 에러를 일으킨(generate) 코드와 알리는(report) 코드는 분리하는 것이 좋은 방법이다
