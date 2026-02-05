@@ -92,6 +92,11 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Void visitVarStmt(Stmt.Var stmt) {
+        return null;
+    }
+
     // 리터럴은 꺼내서 평가만 하면된다
     @Override
     public Object visitLiteralExpr(Expr.Literal expr) {
