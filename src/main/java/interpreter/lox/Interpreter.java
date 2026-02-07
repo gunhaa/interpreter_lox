@@ -106,6 +106,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return null;
     }
 
+    @Override
+    public Object visitAssignExpr(Expr.Assign expr) {
+        Object value = evaluate(expr.value);
+        environment.assign(expr.name, value);
+        return value;
+    }
+
     // 리터럴은 꺼내서 평가만 하면된다
     @Override
     public Object visitLiteralExpr(Expr.Literal expr) {
@@ -157,7 +164,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         return true;
     }
 
-    private boolean isEqual(Object a, Object b) {
+    private boolean  isEqual(Object a, Object b) {
         if (a == null && b == null) return true;
         if (a == null) return false;
 

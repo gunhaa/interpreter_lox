@@ -70,7 +70,26 @@ public class Parser {
     }
 
     private Expr expression() {
-        return equality();
+//        return equality();
+        return assignment();
+    }
+
+    private Expr assignment() {
+        Expr expr = equality();
+
+        if (match(EQUAL)) {
+            Token equals = previous();
+            Expr value = assignment();
+
+            if(expr instanceof Expr.Variable) {
+                Token name = ((Expr.Variable) expr).name;
+                return new Expr.Assign(name, value);
+            }
+
+            error(equals, "Invalid assignment target.");
+        }
+
+        return expr;
     }
 
     // 동등성
@@ -141,7 +160,12 @@ public class Parser {
         if (match(NIL)) return new Expr.Literal(null);
 
         if (match(NUMBER, STRING)) {
+//            System.out.println("current: " + tokens.get(current));
             return new Expr.Literal(previous().literal);
+        }
+
+        if(match(IDENTIFIER)) {
+            return new Expr.Variable(previous());
         }
 
         if (match(LEFT_PAREN)) {
