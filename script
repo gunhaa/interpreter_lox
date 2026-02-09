@@ -24,10 +24,28 @@ var k = 1;
     print k;
 }
 
+// fibo
 var current = 0;
 var temp;
-for (var init = 1; current < 10000; init = temp + init) {
+for (var init = 1; current < 100000; init = temp + init) {
     print current;
     temp = current;
     current = init;
 }
+
+// fn
+
+fun sayHi(first, last) {
+    print "Hi, " + first + " " + last + "!";
+}
+
+sayHi("Dear", "Reader");
+
+// recursive
+
+fun count(n) {
+    if(n>1) count(n-1);
+    print n;
+}
+
+count(3);
