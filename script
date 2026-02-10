@@ -27,7 +27,7 @@ var k = 1;
 // fibo
 var current = 0;
 var temp;
-for (var init = 1; current < 100000; init = temp + init) {
+for (var init = 1; current < 1; init = temp + init) {
     print current;
     temp = current;
     current = init;
@@ -39,7 +39,7 @@ fun sayHi(first, last) {
     print "Hi, " + first + " " + last + "!";
 }
 
-sayHi("Dear", "Reader");
+// sayHi("Dear", "Reader");
 
 // recursive
 
@@ -48,4 +48,29 @@ fun count(n) {
     print n;
 }
 
-count(3);
+// count(3);
+
+fun fib(n) {
+    if(n<=1) return n;
+    return fib(n-2) + fib(n-1);
+}
+
+for (var i = 0; i < 20; i = i + 1) {
+    print fib(i);
+}
+
+// closure
+
+fun makeCounter() {
+    var i = 11;
+    fun count() {
+        i = i + 1;
+        print i;
+    }
+
+    return count;
+}
+
+var count = makeCounter();
+count();
+count();
