@@ -9,6 +9,7 @@ public class LoxFunction implements LoxCallable{
 
     public LoxFunction(Stmt.Function fn, Environment closure) {
         this.fn = fn;
+
         this.closure = closure;
     }
 
@@ -27,6 +28,7 @@ public class LoxFunction implements LoxCallable{
         for (int i = 0; i < fn.params.size(); i++) {
             environment.define(fn.params.get(i).lexeme, arguments.get(i));
         }
+
         try {
             interpreter.executeBlock(fn.body, environment);
         } catch (Return returnValue) {

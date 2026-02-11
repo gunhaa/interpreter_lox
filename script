@@ -74,3 +74,11 @@ fun makeCounter() {
 var count = makeCounter();
 count();
 count();
+
+
+var scope = "outer scope";
+
+{
+    var scope = "inner scope";
+    print scope;
+}
