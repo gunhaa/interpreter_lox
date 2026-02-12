@@ -9,7 +9,6 @@ public class LoxFunction implements LoxCallable{
 
     public LoxFunction(Stmt.Function fn, Environment closure) {
         this.fn = fn;
-
         this.closure = closure;
     }
 
