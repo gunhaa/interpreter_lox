@@ -20,8 +20,10 @@ print c; // global c
 
 var k = 1;
 {
-    var k = k + 2;
-    print k;
+    // var k = k + 2;
+    // print k;
+    var ka = k + 2;
+    print ka;
 }
 
 // fibo
