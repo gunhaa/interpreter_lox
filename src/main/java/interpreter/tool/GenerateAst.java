@@ -9,24 +9,28 @@ import java.util.List;
 // Expr.java 자동생성
 public class GenerateAst {
     public static void main(String[] args) throws IOException {
-        if(args.length != 1) {
+        if (args.length != 1) {
             System.err.println("Usage: generate_ast <output directory>");
             System.exit(64);
         }
         String outputDir = args[0];
         defineAst(outputDir, "Expr", Arrays.asList(
-            "Assign: Token name, Expr value",
-            "Binary: Expr left, Token operator, Expr right",
-            "Call: Expr callee, Token paren, List<Expr> arguments",
-            "Grouping: Expr expression",
-            "Literal: Object value",
-            "Logical: Expr left, Token operator, Expr right",
-            "Unary: Token operator, Expr right",
-            "Variable: Token name"
+                "Assign: Token name, Expr value",
+                "Binary: Expr left, Token operator, Expr right",
+                "Call: Expr callee, Token paren, List<Expr> arguments",
+                "Get: Expr object, Token name",
+                "Grouping: Expr expression",
+                "Literal: Object value",
+                "Logical: Expr left, Token operator, Expr right",
+                "Set: Expr object, Token name, Expr value",
+                "This: Token keyword",
+                "Unary: Token operator, Expr right",
+                "Variable: Token name"
         ));
 
         defineAst(outputDir, "Stmt", Arrays.asList(
                 "Block      : List<Stmt> statements",
+                "Class      : Token name, List<Stmt.Function> methods",
                 "Expression : Expr expression",
                 "Function   : Token name, List<Token> params, List<Stmt> body",
                 "If         : Expr condition, Stmt thenBranch," + " Stmt elseBranch",
@@ -88,7 +92,7 @@ public class GenerateAst {
         writer.println("   " + className + "(" + fieldList + ") {");
 
         String[] fields = fieldList.split(", ");
-        for(String field : fields) {
+        for (String field : fields) {
             String name = field.split(" ")[1];
             writer.println("   this." + name + " = " + name + ";");
         }
@@ -104,7 +108,7 @@ public class GenerateAst {
         // field
         writer.println();
         for (String field : fields) {
-            writer.println("    final " + field + ";" );
+            writer.println("    final " + field + ";");
         }
 
         writer.println("  }");

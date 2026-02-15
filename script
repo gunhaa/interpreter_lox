@@ -84,3 +84,27 @@ var scope = "outer scope";
     var scope = "inner scope";
     print scope;
 }
+
+class DevonshireCream {
+    serveOn() {
+        return "Scones Scones Scones";
+    }
+}
+
+print DevonshireCream().serveOn();
+
+class Bagel {}
+var bagel = Bagel();
+print bagel;
+
+
+class Cake {
+    taste() {
+        var adjective = "delicious";
+        print "The " + this.flavor + " cake is " + adjective + "!!";
+    }
+}
+
+var cake = Cake();
+cake.flavor = "German chocolate";
+cake.taste();

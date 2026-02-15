@@ -26,6 +26,7 @@ public class Environment {
     }
 
     // 할당 - 변수의 값을 찾아서 넣는다
+    // 이미 선언된 a에 a = 5;라고 값을 넣는 행위
     void assign(Token name, Object value) {
         if(values.containsKey(name.lexeme)) {
             values.put(name.lexeme, value);
@@ -40,7 +41,8 @@ public class Environment {
         throw new RuntimeError(name, "Undefined variable '" + name.lexeme + "'.");
     }
 
-    // 정의 - 변수에 값을 넣는다
+    // 정의 - 변수를 생성
+    // int a; 또는 int a = 1; 처럼 타입과 이름을 선언
     void define(String name, Object value) {
         values.put(name, value);
     }
